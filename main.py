@@ -1,6 +1,6 @@
-# Importar la función de entrenamiento y evaluación desde el módulo neural_networks_keras
+# Import the training and evaluation function from the neural_networks_keras module
 from src.neural_network_keras import train_and_evaluate
 
-# Verifica si el script se ejecuta directamente
+# Check if the script is being run directly
 if __name__ == "__main__":
-    train_and_evaluate()  # Llama a la función para entrenar y evaluar la red neuronal
+    train_and_evaluate()  # Call the function to train and evaluate the neural network
