@@ -1,62 +1,62 @@
-# Importación de bibliotecas necesarias
-import numpy as np  # Biblioteca para operaciones matemáticas y manipulación de arreglos numéricos
-from keras.models import Sequential #type: ignore # Importación del modelo secuencial de Keras 
-from keras.layers import Dense, Input  #type: ignore # Capas para construir la red neuronal
-from keras.utils import to_categorical  #type: ignore # Utilidad para convertir etiquetas a formato one-hot encoding
-from keras.datasets import mnist  #type: ignore # Base de datos MNIST de dígitos escritos a mano
-import matplotlib.pyplot as plt  # Biblioteca para la generación de gráficos
+# Import necessary libraries
+import numpy as np  # Library for mathematical operations and numerical array manipulation
+from keras.models import Sequential # Import the Sequential model from Keras
+from keras.layers import Dense, Input  # Layers to build the neural network
+from keras.utils import to_categorical  # Utility to convert labels to one-hot encoding format
+from keras.datasets import mnist  # MNIST dataset of handwritten digits
+import matplotlib.pyplot as plt  # Library for generating plots
 
-# Definición de la función principal para entrenar y evaluar el modelo
+# Define the main function to train and evaluate the model
 def train_and_evaluate():
     """
-    Función que carga los datos MNIST, entrena una red neuronal y evalúa su desempeño.
+    This function loads the MNIST data, trains a neural network, and evaluates its performance.
     """
 
-    # Cargar los datos de entrenamiento y prueba desde MNIST
+    # Load the training and test data from MNIST
     (train_data_x, train_labels_y), (test_data_x, test_labels_y) = mnist.load_data()
 
-    # Imprimir información sobre los datos cargados
-    print("Forma de los datos de entrenamiento:", train_data_x.shape)
-    print("Etiqueta del primer ejemplo de entrenamiento:", train_labels_y[1])
-    print("Forma de los datos de prueba:", test_data_x.shape)
+    # Print information about the loaded data
+    print("Shape of training data:", train_data_x.shape)
+    print("Label of the first training example:", train_labels_y[1])
+    print("Shape of test data:", test_data_x.shape)
     
-    # Visualizar un ejemplo de imagen de entrenamiento
+    # Visualize an example training image
     plt.imshow(train_data_x[1], cmap="gray")
-    plt.title("Ejemplo de imagen de entrenamiento")
+    plt.title("Example Training Image")
     plt.show()
 
-    # Normalización de datos:
-    # Convertimos las imágenes en vectores de 28x28 (a un solo arreglo de 784 valores)
-    # y los normalizamos dividiendo entre 255 (para que estén en el rango [0,1])
+    # Data normalization:
+    # Convert images into 28x28 vectors (a single array of 784 values)
+    # and normalize by dividing by 255 (to scale the values to the range [0,1])
     x_train = train_data_x.reshape(60000, 28*28).astype('float32') / 255
-    y_train = to_categorical(train_labels_y)  # Convertimos las etiquetas a formato one-hot
+    y_train = to_categorical(train_labels_y)  # Convert labels to one-hot format
 
     x_test = test_data_x.reshape(10000, 28*28).astype('float32') / 255
-    y_test = to_categorical(test_labels_y)  # Convertimos las etiquetas de prueba a one-hot
+    y_test = to_categorical(test_labels_y)  # Convert test labels to one-hot format
 
-    # Definición de la arquitectura de la red neuronal
+    # Define the architecture of the neural network
     model = Sequential([
-        Input(shape=(28*28,)),  # Capa de entrada con 784 neuronas (tamaño de la imagen)
-        Dense(512, activation='relu'),  # Capa oculta con 512 neuronas y activación ReLU
-        Dense(10, activation='softmax')  # Capa de salida con 10 neuronas (una por cada dígito 0-9), activación softmax
+        Input(shape=(28*28,)),  # Input layer with 784 neurons (image size)
+        Dense(512, activation='relu'),  # Hidden layer with 512 neurons and ReLU activation
+        Dense(10, activation='softmax')  # Output layer with 10 neurons (one for each digit 0-9), softmax activation
     ])
 
-    # Compilación del modelo
+    # Compile the model
     model.compile(
-        optimizer='rmsprop',  # Optimizador para ajustar los pesos (RMSprop suele funcionar bien para redes profundas)
-        loss='categorical_crossentropy',  # Función de pérdida para clasificación multiclase
-        metrics=['accuracy']  # Métrica de evaluación (precisión)
+        optimizer='rmsprop',  # Optimizer to adjust weights (RMSprop works well for deep networks)
+        loss='categorical_crossentropy',  # Loss function for multiclass classification
+        metrics=['accuracy']  # Evaluation metric (accuracy)
     )
 
-    # Entrenamiento del modelo
-    model.fit(x_train, y_train, epochs=8, batch_size=128)  # 8 épocas, mini-batch de 128 imágenes
+    # Train the model
+    model.fit(x_train, y_train, epochs=8, batch_size=128)  # 8 epochs, mini-batch of 128 images
 
-    # Evaluación del modelo en el conjunto de prueba
-    loss, accuracy = model.evaluate(x_test, y_test)  # Calcula la pérdida y la precisión en datos de prueba
-    print(f"Precisión en el conjunto de prueba: {accuracy:.4f}")  # Muestra la precisión final
+    # Evaluate the model on the test set
+    loss, accuracy = model.evaluate(x_test, y_test)  # Calculate loss and accuracy on test data
+    print(f"Test accuracy: {accuracy:.4f}")  # Display the final accuracy
 
-    print("Entrenamiento y evaluación completados exitosamente.")  # Mensaje de finalización
+    print("Training and evaluation completed successfully.")  # Completion message
 
-# Evitar ejecución automática si se importa este script en otro módulo
+# Avoid automatic execution if this script is imported into another module
 if __name__ == "__main__":
-    train_and_evaluate()  # Llama a la función principal si el script se ejecuta directamente
+    train_and_evaluate()  # Call the main function if the script is run directly
